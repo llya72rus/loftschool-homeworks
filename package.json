@@ -20,12 +20,6 @@
     "cypress": "^3.1.0",
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.5.0",
-<<<<<<< HEAD
-    "eslint-plugin-cypress": "^2.0.1",
-    "eslint-plugin-react": "^7.11.1",
-    "eslint-plugin-react-perf": "^2.0.9"
-=======
     "eslint-plugin-cypress": "^2.0.1"
->>>>>>> 81072ea1c9c5622fd4aef33b5c6489bc01e8da8c
   }
 }

@@ -1,53 +1,4 @@
 version: 2
-<<<<<<< HEAD
-
-defaults: &defaults
-  working_directory: ~/app
-  docker:
-    - image: cypress/base:8
-      environment:
-        TERM: xterm
-
-jobs:
-  lint-and-workspace-warm:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore_cache: &restore_cache
-          keys:
-            - yarn-packages-v12-{{ checksum "yarn.lock" }}
-            - yarn-packages-v12-
-
-      - run: &install_deps
-          name: Install Dependencies
-          command: |
-            yarn install
-            yarn autoclean --force
-
-      - save_cache: &save_cache
-          name: Save Yarn Package Cache
-          key: yarn-packages-v12-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/.cache/Cypress
-            - node_modules
-
-      - run:
-          name: Run linters
-          command: yarn run lint
-
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - app/node_modules
-            - .cache/Cypress
-
-  unit-tests:
-    <<: *defaults
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/
-=======
 jobs:
   build:
     working_directory: ~/app
@@ -79,22 +30,11 @@ jobs:
       - run:
           name: Build app
           command: yarn build
->>>>>>> 81072ea1c9c5622fd4aef33b5c6489bc01e8da8c
 
       - run:
           name: Unit tests
           command: yarn test
 
-<<<<<<< HEAD
-  integration-tests:
-    <<: *defaults
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/
-
-=======
->>>>>>> 81072ea1c9c5622fd4aef33b5c6489bc01e8da8c
       - run:
           name: Start background app
           command: yarn start
@@ -104,35 +44,6 @@ jobs:
           name: Cypress tests
           command: yarn run cypress:run
 
-<<<<<<< HEAD
-  build:
-    <<: *defaults
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/
-
-      - run:
-          name: Build app
-          command: yarn build
-
-      - persist_to_workspace:
-          root: build
-          paths:
-            - index.html
-            - asset-manifest.json
-            - favicon.ico
-            - manifest.json
-            - static
-
-  deploy:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: build
-
-=======
->>>>>>> 81072ea1c9c5622fd4aef33b5c6489bc01e8da8c
       - run:
           name: Set PR number
           command: |
@@ -141,13 +52,10 @@ jobs:
             echo $CIRCLE_PR_NUMBER
 
       - run:
-<<<<<<< HEAD
-=======
           name: Remove service workers
           command: rm ~/app/build/service-worker.js
 
       - run:
->>>>>>> 81072ea1c9c5622fd4aef33b5c6489bc01e8da8c
           name: Remove old build
           command:
             ssh -o StrictHostKeyChecking=no root@51.15.83.43 rm -rf
@@ -156,11 +64,7 @@ jobs:
       - run:
           name: Copy new build
           command:
-<<<<<<< HEAD
-            scp -v -o StrictHostKeyChecking=no -r build
-=======
             scp -v -o StrictHostKeyChecking=no -r ~/app/build
->>>>>>> 81072ea1c9c5622fd4aef33b5c6489bc01e8da8c
             root@51.15.83.43:/var/www/sep-pr-$CIRCLE_PR_NUMBER
 
       - run:
@@ -168,30 +72,3 @@ jobs:
           command:
             ssh -o StrictHostKeyChecking=no root@51.15.83.43
             "/var/www/setup-server/index.js --address sep-pr-$CIRCLE_PR_NUMBER"
-<<<<<<< HEAD
-
-workflows:
-  version: 2
-  build-test-deploy:
-    jobs:
-      - lint-and-workspace-warm
-
-      - unit-tests:
-          requires:
-            - lint-and-workspace-warm
-
-      - integration-tests:
-          requires:
-            - lint-and-workspace-warm
-
-      - build:
-          requires:
-            - lint-and-workspace-warm
-
-      - deploy:
-          requires:
-            - build
-            - unit-tests
-            - integration-tests
-=======
->>>>>>> 81072ea1c9c5622fd4aef33b5c6489bc01e8da8c
