@@ -73,17 +73,21 @@ export default class Form extends Component {
         if(!this.state.values[key]) {
           console.log(this.errorPhrases.emptyFields[key])
           console.log(key)
-          this.setState(() => {
-            return {
-              errorMessages: {
-                ...this.state.errorMessages,
-                [key]: this.errorPhrases.emptyFields[key] 
-              }
+          this.setState({
+            errorMessages: {
+              ...this.state.errorMessages,
+              [key]: this.errorPhrases.emptyFields[key] 
             }
           })
           console.log(this.state.errorMessages)
         } else if (this.state.values[key] !== this.data[key]) {
-          console.log(this.errorPhrases.wrongFields[key])
+          console.log(this.errorPhrases.wrongFields[key]);
+          this.setState({
+            errorMessages: {
+              ...this.state.errorMessages,
+              [key]: this.errorPhrases.wrongFields[key] 
+            }
+          })
         }
 
     }

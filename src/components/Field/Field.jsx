@@ -12,7 +12,7 @@ export default class Field extends Component {
   }
 
   render() {
-    const { name, type, label, onInputChange } = this.props;
+    const { name, type, label, onInputChange, errorMessage } = this.props;
     const inputClassNames = `field__input field-input t-input-${name}`;
     const errmsgClassNames = `field__error field-error t-error-${name}`;
     return (
@@ -27,7 +27,7 @@ export default class Field extends Component {
           type={type}
           onChange={onInputChange}
         />
-        <span className={errmsgClassNames}></span>
+        <span className={errmsgClassNames}>{errorMessage}</span>
       </p>
     )
   }
