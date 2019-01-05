@@ -1,144 +1,119 @@
 import React, { Component } from 'react'
+import Field from '../Field'
 import './Form.css'
 import bond from './assets/bond_approve.jpg';
 
 export default class Form extends Component {
   
   errorPhrases = {
-    firstNameEmpty: 'Нужно указать имя',
-    firstNameWrong: 'Имя указано не верно',
-    lastNameEmpty: 'Нужно указать фамилию',
-    lastNameWrong: 'Фамилия указано не верно',
-    passwordEmpty: 'Нужно указать пароль',
-    passwordWrong: 'Пароль указан не верно'
+    emptyFields: {
+      firstname: 'Нужно указать имя',
+      lastname: 'Нужно указать фамилию',
+      password: 'Нужно указать пароль'
+    },
+    wrongFields: {
+      firstname: 'Имя указано не верно',
+      lastname: 'Фамилия указана не верно',
+      password: 'Пароль указан не верно'
+    }
   }
+
+  data = {
+    firstname: 'James',
+    lastname: 'Bond',
+    password: '007'
+  }
+
+  labels = {
+    firstname: 'Имя',
+    lastname: 'Фамилия',
+    password: 'Пароль'
+  }
+
 
   state = {
     success: false,
-    firstName: '',
-    lastName: '',
-    password: '',
+
+    values: {
+      firstname: '',
+      lastname: '',
+      password: '',
+    },
+ 
     errorMessages: {
-      firstName: '',
-      lastName: '',
+      firstname: '',
+      lastname: '',
       password: ''
     }
   }
 
   onInputChange = (e) => {
     const name = e.target.name;
+    console.log(this.state.values)
     this.setState({
-      [name]: e.target.value,
+      values: {
+        ...this.state.values,
+        [name]: e.target.value,
+      },
       errorMessages: {
-        firstName: '',
-        lastName: '',
+        firstname: '',
+        lastname: '',
         password: ''
       }
     });
 
-    // this.setState(() => {
-    //   return {[name + 'Value']: e.target.value}
-    // })
   }
 
-  checkEmptyField = (fieldsData, fieldName) => {
-    if(!fieldsData[fieldName]) {
-      return {
-        errorMessages: {
-          firstName: this.errorPhrases.firstNameEmpty
-        }
-      }
-    }
-  }
+
 
   onSubmit = e => {
     e.preventDefault();
-    const { success, errorMessages,...fieldsData } = this.state;
-    // console.log(this.props);
-    // console.log(data);
-    // console.log(this.state);
-    console.log(fieldsData.firstName)
-    if(!fieldsData.firstName) {
-      this.setState({
-        errorMessages: {
-          firstName: this.errorPhrases.firstNameEmpty
+  
+    for (const key in this.state.values) {
+        if(!this.state.values[key]) {
+          console.log(this.errorPhrases.emptyFields[key])
+          console.log(key)
+          this.setState(() => {
+            return {
+              errorMessages: {
+                ...this.state.errorMessages,
+                [key]: this.errorPhrases.emptyFields[key] 
+              }
+            }
+          })
+          console.log(this.state.errorMessages)
+        } else if (this.state.values[key] !== this.data[key]) {
+          console.log(this.errorPhrases.wrongFields[key])
         }
-      });
-    }
 
-    if(!fieldsData.lastName) {
-      this.setState({
-        errorMessages: {
-          lastName: this.errorPhrases.lastNameEmpty
-        }
-      });
     }
-   
-    // if(data.firstName === this.props.firstName) {
-    //   setTimeout(() => {
-    //     this.setState({
-    //       success: true
-    //     })
-    //   }, 1500)
-      
-    //}
   }
 
-  // showErrorMessage = (e) => {
-  //   if(!e.target.value) {
-      
-  //   }
-  // }
-
   render() {
-    //console.log(this.props)
-    const { success } = this.state;
+    const { success, values } = this.state;
+    const fields = Object.keys(values).map((value) => {
+      return (
+        <Field 
+          key={value}
+          name={value} 
+          type={value === "password" ? "password" : "text"} 
+          label={this.labels[value]} 
+          onInputChange={this.onInputChange}
+          errorMessage={this.state.errorMessages[value]}
+        />
+      )
+    });
     return (
       success ? 
-      <img src={bond} alt="bond approve" className="t-bond-image" />
+      (<img src={bond} alt="bond approve" className="t-bond-image" />)
       :
-      <form className="form" onSubmit={this.onSubmit}>
-        <h1>Введите своё имя, агент</h1>
-        <p className="field">
-          <label htmlFor="firstName" className="field__label">
-            <span className="field-label">Имя</span>
-          </label>
-          <input 
-            className="field__input field-input t-input-firstname" 
-            name="firstName"
-            type="text"
-            onChange={this.onInputChange}
-          />
-          <span className="field__error field-error t-error-firstname">{this.state.errorMessages.firstName}</span>
-        </p>
-        <p className="field">
-          <label htmlFor="lastName" className="field__label">
-            <span className="field-label">Фамилия</span>
-          </label>
-          <input 
-            className="field__input field-input t-input-lastname" 
-            name="lastName" 
-            type="text"
-            onChange={this.onInputChange}
-          />
-          <span className="field__error field-error t-error-lastname">{this.state.errorMessages.lastName}</span>
-        </p>
-        <p className="field">
-          <label htmlFor="password" className="field__label">
-            <span className="field-label">Пароль</span>
-          </label>
-          <input 
-            className="field__input field-input t-input-password" 
-            type="password"
-            name="password"
-            onChange={this.onInputChange}
-          />
-          <span className="field__error field-error t-error-password">{this.state.errorMessages.passwordName}</span>
-        </p>
+      (<form className="form" onSubmit={this.onSubmit}>
+        <h1>Введите свои данные, агент</h1>
+        {fields}
         <div className="form__buttons">
           <input type="submit" className="button t-submit" value="Проверить" />
         </div>
-      </form>
+      </form>)
     )
   }
 }
