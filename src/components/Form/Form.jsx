@@ -68,29 +68,28 @@ export default class Form extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-  
+    const errors = {}
     for (const key in this.state.values) {
         if(!this.state.values[key]) {
-          console.log(this.errorPhrases.emptyFields[key])
-          console.log(key)
-          this.setState({
-            errorMessages: {
-              ...this.state.errorMessages,
-              [key]: this.errorPhrases.emptyFields[key] 
-            }
-          })
-          console.log(this.state.errorMessages)
-        } else if (this.state.values[key] !== this.data[key]) {
-          console.log(this.errorPhrases.wrongFields[key]);
-          this.setState({
-            errorMessages: {
-              ...this.state.errorMessages,
-              [key]: this.errorPhrases.wrongFields[key] 
-            }
-          })
+          errors[key] = this.errorPhrases.emptyFields[key];
+        } else if (this.state.values[key].toLowerCase() !== this.data[key].toLowerCase()) {
+          errors[key] = this.errorPhrases.wrongFields[key]
         }
-
     }
+
+    Object.keys(errors).length 
+    ? 
+    this.setState({
+      errorMessages: {
+        ...this.state.errorMessages,
+        ...errors
+      }
+    })
+    :
+    this.setState({
+      success: true
+    })
+     
   }
 
   render() {
