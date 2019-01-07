@@ -1,10 +1,9 @@
-import React, { Component } from 'react'
-import Field from '../Field'
-import './Form.css'
+import React, { Component } from 'react';
+import Field from '../Field';
+import './Form.css';
 import bond from './assets/bond_approve.jpg';
 
 export default class Form extends Component {
-  
   errorPhrases = {
     emptyFields: {
       firstname: 'Нужно указать имя',
@@ -16,20 +15,19 @@ export default class Form extends Component {
       lastname: 'Фамилия указана не верно',
       password: 'Пароль указан не верно'
     }
-  }
+  };
 
   data = {
     firstname: 'James',
     lastname: 'Bond',
     password: '007'
-  }
+  };
 
   labels = {
     firstname: 'Имя',
     lastname: 'Фамилия',
     password: 'Пароль'
-  }
-
+  };
 
   state = {
     success: false,
@@ -37,23 +35,23 @@ export default class Form extends Component {
     values: {
       firstname: '',
       lastname: '',
-      password: '',
+      password: ''
     },
- 
+
     errorMessages: {
       firstname: '',
       lastname: '',
       password: ''
     }
-  }
+  };
 
-  onInputChange = (e) => {
+  onInputChange = e => {
     const name = e.target.name;
-    console.log(this.state.values)
+    console.log(this.state.values);
     this.setState({
       values: {
         ...this.state.values,
-        [name]: e.target.value,
+        [name]: e.target.value
       },
       errorMessages: {
         firstname: '',
@@ -61,62 +59,57 @@ export default class Form extends Component {
         password: ''
       }
     });
-
-  }
-
-
+  };
 
   onSubmit = e => {
     e.preventDefault();
-    const errors = {}
+    const errors = {};
     for (const key in this.state.values) {
-        if(!this.state.values[key]) {
-          errors[key] = this.errorPhrases.emptyFields[key];
-        } else if (this.state.values[key].toLowerCase() !== this.data[key].toLowerCase()) {
-          errors[key] = this.errorPhrases.wrongFields[key]
-        }
+      if (!this.state.values[key]) {
+        errors[key] = this.errorPhrases.emptyFields[key];
+      } else if (
+        this.state.values[key].toLowerCase() !== this.data[key].toLowerCase()
+      ) {
+        errors[key] = this.errorPhrases.wrongFields[key];
+      }
     }
 
-    Object.keys(errors).length 
-    ? 
-    this.setState({
-      errorMessages: {
-        ...this.state.errorMessages,
-        ...errors
-      }
-    })
-    :
-    this.setState({
-      success: true
-    })
-     
-  }
+    Object.keys(errors).length
+      ? this.setState({
+          errorMessages: {
+            ...this.state.errorMessages,
+            ...errors
+          }
+        })
+      : this.setState({
+          success: true
+        });
+  };
 
   render() {
     const { success, values } = this.state;
-    const fields = Object.keys(values).map((value) => {
+    const fields = Object.keys(values).map(value => {
       return (
-        <Field 
+        <Field
           key={value}
-          name={value} 
-          type={value === "password" ? "password" : "text"} 
-          label={this.labels[value]} 
+          name={value}
+          type={value === 'password' ? 'password' : 'text'}
+          label={this.labels[value]}
           onInputChange={this.onInputChange}
           errorMessage={this.state.errorMessages[value]}
         />
-      )
+      );
     });
-    return (
-      success ? 
-      (<img src={bond} alt="bond approve" className="t-bond-image" />)
-      :
-      (<form className="form" onSubmit={this.onSubmit}>
+    return success ? (
+      <img src={bond} alt="bond approve" className="t-bond-image" />
+    ) : (
+      <form className="form" onSubmit={this.onSubmit}>
         <h1>Введите свои данные, агент</h1>
         {fields}
         <div className="form__buttons">
           <input type="submit" className="button t-submit" value="Проверить" />
         </div>
-      </form>)
-    )
+      </form>
+    );
   }
 }

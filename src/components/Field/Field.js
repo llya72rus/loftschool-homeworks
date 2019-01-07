@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 export default class Field extends Component {
-
   errorPhrases = {
     firstNameEmpty: 'Нужно указать имя',
     firstNameWrong: 'Имя указано не верно',
@@ -9,7 +8,7 @@ export default class Field extends Component {
     lastnameWrong: 'Фамилия указано не верно',
     passwordEmpty: 'Нужно указать пароль',
     passwordWrong: 'Пароль указан не верно'
-  }
+  };
 
   render() {
     const { name, type, label, onInputChange, errorMessage } = this.props;
@@ -20,7 +19,7 @@ export default class Field extends Component {
         <label htmlFor={name} className="field__label">
           <span className="field-label">{label}</span>
         </label>
-        <input 
+        <input
           className={inputClassNames}
           name={name}
           id={name}
@@ -29,6 +28,6 @@ export default class Field extends Component {
         />
         <span className={errmsgClassNames}>{errorMessage}</span>
       </p>
-    )
+    );
   }
 }
