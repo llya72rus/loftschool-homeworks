@@ -11,16 +11,15 @@ describe('Приложение написано с использованием 
   });
 
   describe('Компонент содержит', () => {
-    it('Статичный метод getDerivedStateFromProps', () => {
-      expect(Show.getDerivedStateFromProps).toBeDefined();
-    });
-
     it('Метод componentDidUpdate', () => {
       expect(wrapper.instance().componentDidUpdate).toBeDefined();
     });
   });
 
   describe('Компонент НЕ содержит', () => {
+    it('Статичный метод getDerivedStateFromProps', () => {
+      expect(Show.getDerivedStateFromProps).toBeUndefined();
+    });
     it('Метод componentDidMount', () => {
       expect(wrapper.instance().componentDidMount).toBeUndefined();
     });
