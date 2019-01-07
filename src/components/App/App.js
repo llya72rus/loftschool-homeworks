@@ -36,8 +36,6 @@ class App extends PureComponent {
 
   render() {
     const { selectedShow } = this.state;
-    console.log(this.state);
-
     return (
       <div className="app">
         <div className="radio-group">

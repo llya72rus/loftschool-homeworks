@@ -10,31 +10,23 @@ export default class Show extends Component {
     data: null
   };
 
-  static getDerivedStateFromProps(props, state) {
-    return (state = { showId: props.showId });
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.showId !== prevState.showId) {
+      return { showId: nextProps.showId, data: null };
+    }
+    return null;
   }
 
-  componentDidUpdate(prevProps) {
-    const { showId } = this.props;
-    if (prevProps.showId !== showId) {
-      (async () => {
-        const data = await getShowInfo(showId);
-        console.log(data);
-        this.setState({
-          data
-        });
-        console.log(this.state);
-      })();
+  componentDidUpdate() {
+    const { data, showId } = this.state;
+    if (data == null && showId !== '') {
+      getShowInfo(showId).then(data => {
+        this.setState({ data });
+      });
     }
   }
 
-  // getContent = data => {};
-
   render() {
-    // const {
-    //   data: { name, genres }
-    // } = this.state;
-
     const { data } = this.state;
 
     return data ? (
