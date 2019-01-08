@@ -2,8 +2,10 @@ import React from 'react';
 import Show from './Show';
 import { shallow } from 'enzyme';
 
+jest.mock('../../api.js');
+
 describe('Приложение написано с использованием gDSFP', () => {
-  const wrapper = shallow(<Show />);
+  const wrapper = shallow(<Show showId="" />);
 
   it('Стейт содержит только 2 поля, showId и data', () => {
     const state = wrapper.state();
@@ -11,8 +13,8 @@ describe('Приложение написано с использованием 
   });
 
   describe('Компонент содержит', () => {
-    it('Метод componentDidUpdate', () => {
-      expect(wrapper.instance().componentDidUpdate).toBeDefined();
+    it('Метод componentDidMount', () => {
+      expect(wrapper.instance().componentDidMount).toBeDefined();
     });
   });
 
@@ -20,8 +22,8 @@ describe('Приложение написано с использованием 
     it('Статичный метод getDerivedStateFromProps', () => {
       expect(Show.getDerivedStateFromProps).toBeUndefined();
     });
-    it('Метод componentDidMount', () => {
-      expect(wrapper.instance().componentDidMount).toBeUndefined();
+    it('Метод componentDidUpdate', () => {
+      expect(wrapper.instance().componentDidUpdate).toBeUndefined();
     });
   });
 });

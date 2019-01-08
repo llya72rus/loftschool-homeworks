@@ -10,15 +10,17 @@ export default class Show extends Component {
     data: null
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidMount() {
     const { showId } = this.props;
-    if (prevProps.showId !== showId) {
-      getShowInfo(showId).then(data => {
-        this.setState({ data, showId });
-      });
+    if (showId) {
+      getShowInfo(showId).then(data =>
+        this.setState({
+          showId,
+          data
+        })
+      );
     }
   }
-
   render() {
     const { data } = this.state;
 
