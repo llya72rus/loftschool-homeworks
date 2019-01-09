@@ -12,7 +12,7 @@ export default class Show extends Component {
 
   componentDidMount() {
     const { showId } = this.props;
-    if (showId) {
+    if (showId !== null) {
       getShowInfo(showId).then(data =>
         this.setState({
           showId,
